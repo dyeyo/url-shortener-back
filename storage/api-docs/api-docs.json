@@ -1,0 +1,164 @@
+{
+    "openapi": "3.0.0",
+    "info": {
+        "title": "URL Shortener API",
+        "version": "1.0"
+    },
+    "paths": {
+        "/api/shortens": {
+            "get": {
+                "tags": [
+                    "URLs"
+                ],
+                "summary": "Listas de URLs",
+                "operationId": "getURLs",
+                "responses": {
+                    "200": {
+                        "description": "Lista de posts",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "type": "array",
+                                    "items": {
+                                        "properties": {
+                                            "id": {
+                                                "type": "integer",
+                                                "example": 1
+                                            },
+                                            "original_url": {
+                                                "type": "string",
+                                                "example": "https://www.rfc-editor.org/rfc/Cgt0se5N"
+                                            },
+                                            "shortened_url": {
+                                                "type": "string",
+                                                "example": "3b0EPqNK"
+                                            },
+                                            "created_at": {
+                                                "type": "string",
+                                                "format": "date-time",
+                                                "example": "2024-08-01T12:34:56Z"
+                                            },
+                                            "updated_at": {
+                                                "type": "string",
+                                                "format": "date-time",
+                                                "example": "2024-08-01T12:34:56Z"
+                                            }
+                                        },
+                                        "type": "object"
+                                    }
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+        },
+        "/api/shorten": {
+            "post": {
+                "tags": [
+                    "URLs"
+                ],
+                "summary": "Acortar una URL",
+                "operationId": "shortenUrl",
+                "requestBody": {
+                    "description": "URL a ser acortada",
+                    "required": true,
+                    "content": {
+                        "application/json": {
+                            "schema": {
+                                "properties": {
+                                    "original_url": {
+                                        "type": "string",
+                                        "example": "https://www.rfc-editor.org/rfc/rfc1738"
+                                    }
+                                },
+                                "type": "object"
+                            }
+                        }
+                    }
+                },
+                "responses": {
+                    "201": {
+                        "description": "URL acortada creada con éxito",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "properties": {
+                                        "shortened_url": {
+                                            "type": "string",
+                                            "example": "http://127.0.0.1:8001/b1wyI9He"
+                                        }
+                                    },
+                                    "type": "object"
+                                }
+                            }
+                        }
+                    },
+                    "422": {
+                        "description": "Error de validación"
+                    }
+                }
+            }
+        },
+        "/{shortened_url}": {
+            "get": {
+                "tags": [
+                    "URLs"
+                ],
+                "summary": "Redirigir a la URL original usando la URL acortada",
+                "operationId": "redirectUrl",
+                "parameters": [
+                    {
+                        "name": "shortened_url",
+                        "in": "path",
+                        "required": true,
+                        "schema": {
+                            "type": "string"
+                        }
+                    }
+                ],
+                "responses": {
+                    "302": {
+                        "description": "Redirección a la URL original"
+                    },
+                    "404": {
+                        "description": "URL no encontrada"
+                    }
+                }
+            }
+        },
+        "/api/delete/{id}": {
+            "delete": {
+                "tags": [
+                    "URLs"
+                ],
+                "summary": "Eliminar URL",
+                "operationId": "EliminarUrl",
+                "parameters": [
+                    {
+                        "name": "id",
+                        "in": "path",
+                        "required": true,
+                        "schema": {
+                            "type": "number"
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "URL eliminada exitosamente"
+                    },
+                    "404": {
+                        "description": "URL no encontrada"
+                    }
+                }
+            }
+        }
+    },
+    "tags": [
+        {
+            "name": "URLs",
+            "description": "URLs"
+        }
+    ]
+}
